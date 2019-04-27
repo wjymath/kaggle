@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 
 def load_train_data():
@@ -16,15 +17,20 @@ if __name__ == "__main__":
     data = load_train_data()
     test_data = load_test_data()
     x = data[:, 2:]
-
     y = data[:, 1]
+    print(x.shape)
+    print(y.shape)
+
 
     test_x = test_data[:, 1:]
     no = test_data[:, 0]
     no = no.astype(int)
-    print(no[:3])
-    sample_dict = {1: 0.36, 0: 0.64}
-    clf = LogisticRegression(random_state=0, solver='liblinear', class_weight='balanced', penalty='l1', verbose=1).fit(x, y)
+
+    iter = 5
+    for i in range(5):
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.05)
+        clf = LogisticRegression(random_state=0, solver='liblinear', class_weight='balanced', penalty='l1', verbose=1,
+                                 warm_start=True).fit(x_train, y_train)
     pre_y = clf.predict(test_x)
     pre_y = pre_y.astype(int)
     result = zip(no, pre_y)
