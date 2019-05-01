@@ -23,10 +23,10 @@ if __name__ == "__main__":
     no = test_data[:, 0]
     no = no.astype(int)
     print(no[:3])
-    sample_dict = {1: 0.36, 0: 0.64}
-    clf = LogisticRegression(random_state=0, solver='liblinear', class_weight='balanced', penalty='l1', verbose=1).fit(x, y)
-    pre_y = clf.predict(test_x)
-    pre_y = pre_y.astype(int)
+    # 要求强正则性
+    clf = LogisticRegression(random_state=10, C=0.25, solver='liblinear', class_weight='balanced', penalty='l1', verbose=1).fit(x, y)
+    pre_y = clf.predict_proba(test_x)[:,1]
+    # pre_y = pre_y.astype(int)
     result = zip(no, pre_y)
     file_out = open("submission.csv", 'w')
     file_out.write('id,target\n')
